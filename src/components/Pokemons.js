@@ -3,7 +3,7 @@ import axios from "axios";
 import Pokemon from "./Pokemon";
 
 const Pokemons = () => {
-  const [characters, setCharacters] = useState([]);
+  const [pokemon, setPokemon] = useState([]);
   const [page, setPage] = useState(1);
   const [name, setName] = useState("");
 
@@ -13,17 +13,19 @@ const Pokemons = () => {
     console.log(e.target.value);
     if (e.target.name === "name") {
       setName(e.target.value);
-    } 
+    }
   };
 
+  const url = "https://pokeapi.co/api/v2/pokemon/";
 
-  const url = "https://pokeapi.co/api/v2/pokemon/" + name.toString();
 
   useEffect(() => {
     axios.get(url).then((response) => {
-      setCharacters(response.data.results);
+      setPokemon(response.data.results);
     });
-  });
+  }, []);
+
+
 
   return (
     <>
@@ -40,8 +42,8 @@ const Pokemons = () => {
         />
       </div>
       <div className="row">
-        {characters.map((character) => {
-          return <Pokemon key={character.id} character={character} />;
+        {pokemon.map((pokemon) => {
+          return <Pokemon key={pokemon.name} pokemon={pokemon} />;
         })}
 
         <div className="row justify-content-around mb-5">
