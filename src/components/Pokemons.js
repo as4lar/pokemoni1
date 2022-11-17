@@ -16,14 +16,14 @@ const Pokemons = () => {
     }
   };
 
-  const url = "https://pokeapi.co/api/v2/pokemon/";
+  const url = "https://pokeapi.co/api/v2/pokemon/?limit=21&offset=" +page.toString();
 
 
   useEffect(() => {
     axios.get(url).then((response) => {
       setPokemon(response.data.results);
     });
-  }, []);
+  }, [page]);
 
 
 
@@ -50,7 +50,7 @@ const Pokemons = () => {
           <div className="col-4">
             <button
               className="btn btn-primary"
-              onClick={() => setPage(page - 1)}
+              onClick={() => setPage(page - 21)}
             >
               Anterior
             </button>
@@ -58,7 +58,7 @@ const Pokemons = () => {
           <div className="col-4">
             <button
               className="btn btn-primary"
-              onClick={() => setPage(page + 1)}
+              onClick={() => setPage(page + 21)}
             >
               Siguiente
             </button>
