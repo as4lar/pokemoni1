@@ -4,7 +4,7 @@ import Pokemon from "./Pokemon";
 
 const Pokemons = () => {
   const [pokemon, setPokemon] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [name, setName] = useState("");
 
 
