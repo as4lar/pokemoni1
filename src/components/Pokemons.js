@@ -1,42 +1,70 @@
-import axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import Pokemon from './Pokemon';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Pokemon from "./Pokemon";
+
 const Pokemons = () => {
-    const [pokemons, setPokemons]=useState([]);
-    const[pagina,cambiarPagina]=useState(0);
-    const[name, setName]=useState("");
+  const [characters, setCharacters] = useState([]);
+  const [page, setPage] = useState(1);
+  const [name, setName] = useState("");
 
-    const onChange=(e)=>{
-        if(e.target.name=="buscador"){
-            setName(e.target.value)
-            console.log(e.target.value)
-        }
-    }
-    let url="https://pokeapi.co/api/v2/ability/"+name.toString();
 
-    useEffect(()=>{
-        axios.get(url+pagina.toString()).then((response)=>{
-            console.log(response.data.results);
-            setPokemons(response.data.results);
-        });
-    },[pagina,name]);
-    return (
-        <>
-        <div className="form-group">
-            <input type="text" className="form-control" id="buscador" placeholder="Buscar..." name='buscador' value={name} onChange={onChange}/>
+
+  const onChange = (e) => {
+    console.log(e.target.value);
+    if (e.target.name === "name") {
+      setName(e.target.value);
+    } 
+  };
+
+
+  const url = "https://pokeapi.co/api/v2/pokemon/" + name.toString();
+
+  useEffect(() => {
+    axios.get(url).then((response) => {
+      setCharacters(response.data.results);
+    });
+  });
+
+  return (
+    <>
+      <div className="input-group mb-3 text-center">
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Nombre a buscar"
+          aria-describedby="basic-addon2"
+          name="name"
+          id="name"
+          value={name}
+          onChange={onChange}
+        />
+      </div>
+      <div className="row">
+        {characters.map((character) => {
+          return <Pokemon key={character.id} character={character} />;
+        })}
+
+        <div className="row justify-content-around mb-5">
+          <div className="col-4">
+            <button
+              className="btn btn-primary"
+              onClick={() => setPage(page - 1)}
+            >
+              Anterior
+            </button>
+          </div>
+          <div className="col-4">
+            <button
+              className="btn btn-primary"
+              onClick={() => setPage(page + 1)}
+            >
+              Siguiente
+            </button>
+          </div>
         </div>
-            <div className='row'>
-                {pokemons.map((pokemon)=>(
-                    <Pokemon key= {pokemon.id} pokemon={pokemon}/>
-                ))}
-            </div>
-            <div>
-                <button onClick={()=>cambiarPagina(pagina-1)}>Anterior</button>
-                <button onClick={()=>cambiarPagina(pagina+1)}>Siguiente</button>
-            </div>
-        </>
-    );
+      </div>
+    </>
+  );
 };
- 
+
 export default Pokemons;

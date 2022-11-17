@@ -1,19 +1,24 @@
 import React from "react";
-const Pokemon=({pokemon})=>{
-    return(
-        <div className="col-md-4 mb-4">
-            <div className="card">
-                <div className="card-body text-primary">
-                    <p>{pokemon.name}</p>  
-                </div>    
-            </div>
-        </div>
-        /*
+import "../styles/characters.css"
+
+const Pokemon = ({character}) => {
+    return (
         <>
-            
-            <h3>{character.name}</h3>
-            <img src={character.image} alt={character.name}/>
-        </>*/
+            <div className="col-md-4 mb-4">
+                <div className="card">
+                    <div className="card-horizontal">
+                        <div className={"img-square-wrapper"}>
+                            <img className="card-img-top" src={character.image} alt={character.name}/>
+                        </div>
+                        <div className="card-body">
+                            <h5 className="card-title text-justify">{character.name}</h5>
+                            <p className="card-title text-justify   ">{character.status} - {character.species}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
     );
 };
+
 export default Pokemon;
