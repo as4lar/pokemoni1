@@ -1,72 +1,92 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 import axios from "axios";
 import Pokemon from "./Pokemon";
 
 const Pokemons = () => {
-  const [pokemon, setPokemon] = useState([]);
-  const [page, setPage] = useState(0);
-  const [name, setName] = useState("");
+    const [pokemon, setPokemon] = useState([]);
+    const [page, setPage] = useState(0);
+    const [type, setType] = useState([]);
 
 
+    const urlType = "https://pokeapi.co/api/v2/type/" +
+        "";
+    let url = "https://pokeapi.co/api/v2/pokemon/?limit=24&offset=" + page.toString();
 
-  const onChange = (e) => {
-    console.log(e.target.value);
-    if (e.target.name === "name") {
-      setName(e.target.value);
-    }
-  };
-
-  const url = "https://pokeapi.co/api/v2/pokemon/?limit=21&offset=" +page.toString();
-
-
-  useEffect(() => {
-    axios.get(url).then((response) => {
-      setPokemon(response.data.results);
+    axios.get(urlType).then((response) => {
+        setType(response.data.results)
     });
-  }, [page]);
+
+    useEffect(() => {
+        axios.get(url).then((response) => {
+            setPokemon(response.data.results)
+        });
+    }, [url]);
 
 
+    return (
+        <>
+            <div className="align-content-center " >
+                {type.map((type) => (
+                    <button type="button" className={"btn btn-primary"}> {type.name} </button>
+                ))}
+            </div>
+            <br/>
+            <div className="row">
+                {pokemon.map((pokemon) => {
+                    return <Pokemon key={pokemon.name} pokemon={pokemon} />;
+                })}
 
-  return (
-    <>
-      <div className="input-group mb-3 text-center">
-        <input
-          type="text"
-          className="form-control"
-          placeholder="Nombre a buscar"
-          aria-describedby="basic-addon2"
-          name="name"
-          id="name"
-          value={name}
-          onChange={onChange}
-        />
-      </div>
-      <div className="row">
-        {pokemon.map((pokemon) => {
-          return <Pokemon key={pokemon.name} pokemon={pokemon} />;
-        })}
-
-        <div className="row justify-content-around mb-5">
-          <div className="col-4">
-            <button
-              className="btn btn-primary"
-              onClick={() => setPage(page - 21)}
-            >
-              Anterior
-            </button>
-          </div>
-          <div className="col-4">
-            <button
-              className="btn btn-primary"
-              onClick={() => setPage(page + 21)}
-            >
-              Siguiente
-            </button>
-          </div>
-        </div>
-      </div>
-    </>
-  );
+                <div className="row justify-content-around mb-5">
+                    <div className="col-4">
+                        {(() => {
+                            if (page >= 1) {
+                                return (
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={() => setPage(page - 24)}
+                                    >
+                                        Anterior
+                                    </button>
+                                )
+                            } else if (page <= 1) {
+                                return (
+                                    <button
+                                        className="btn btn-primary disabled"
+                                        onClick={() => setPage(page - 24)}
+                                    >
+                                        Anterior
+                                    </button>
+                                )
+                            }
+                        })()}
+                    </div>
+                    <div className="col-4">
+                        {(() => {
+                            if (page < 1154) {
+                                return (
+                                    <button
+                                        className="btn btn-primary"
+                                        onClick={() => setPage(page + 24)}
+                                    >
+                                        Siguiente
+                                    </button>
+                                )
+                            } else if (page > 1154) {
+                                return (
+                                    <button
+                                        className="btn btn-primary disabled"
+                                        onClick={() => setPage(page + 24)}
+                                    >
+                                        Siguiente
+                                    </button>
+                                )
+                            }
+                        })()}
+                    </div>
+                </div>
+            </div>
+        </>
+    );
 };
 
 export default Pokemons;
