@@ -2,30 +2,23 @@ import React, {useEffect, useState} from "react";
 import "../styles/characters.css"
 import axios from "axios";
 
-const Pokemon = ({pokemon, search, name}) => {
+const Pokemon = ({pokemon, search, name, setTeam,team}) => {
     const [pokeinfo, setPokeinfo] = useState([]);
     const [poketype, setPokeTypes] = useState([]);
-    const [team, setTeam] = useState([]);
 
 
     useEffect(() => {
         axios.get(pokemon.url).then((response) => {
             setPokeinfo(response.data);
             setPokeTypes(response.data.types);
+            setTeam(team)
         });
-    }, []);
+    }, [team]);
 
-    const handleRemove = (e) => {
-        console.log(e);
-        if (team.length >=3){
-
-        }else if(team.length === 0){
-            team.push(pokeinfo.id)
-            console.log(team)
-
-        }else {
-            setTeam([...team,e])
-
+    const onSubmit = (e) => {
+       e.preventDefault()
+        if(team.length <5) {
+            setTeam([...team, pokeinfo]);
         }
     };
 
@@ -37,7 +30,6 @@ const Pokemon = ({pokemon, search, name}) => {
             {(() => {
                 if (search !== "") {
                     return (
-                        console.log(team),
                         <div className="card">
                             <div className={"img-square-wrapper"}>
                                 <img className="card-img-top" src={url_img_search} alt=""/>
@@ -61,7 +53,9 @@ const Pokemon = ({pokemon, search, name}) => {
                                         return <p className="card-title text-justify"
                                                   key={poketype.name}> {poketype.type.name}</p>
                                     })}
-                                    <button className={"btn btn-lg btn-success" } name={pokeinfo.id} onClick={()=> handleRemove(pokeinfo.id)} ></button>
+                                    <form action={""} onSubmit={onSubmit}>
+                                        <button className={"btn btn-lg btn-success button" } value={pokeinfo.id}> Agregar </button>
+                                    </form>
                                 </div>
                             </div>
                         </div>

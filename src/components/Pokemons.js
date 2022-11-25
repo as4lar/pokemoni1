@@ -7,10 +7,13 @@ const Pokemons = () => {
     const [page, setPage] = useState(0);
     const [name, setName] = useState("");
     const [search, setSearch] = useState("");
+    const [team, setTeam] = useState([]);
 
 
     let url = "https://pokeapi.co/api/v2/pokemon/?limit=24&offset=" + page.toString();
     let urlSearch = "https://pokeapi.co/api/v2/pokemon/" + search;
+    let url_img = "";
+
 
     useEffect(() => {
         if (search !== "") {
@@ -36,10 +39,15 @@ const Pokemons = () => {
         }
     };
 
+    const onSubmit = (e) => {
+        e.preventDefault()
+        team.pop(team.id);
+        console.log(team)
+    };
 
     return (
         <>
-            <div className="input-group mb-3 text-center">
+            {/*            <div className="input-group mb-3 text-center">
                 <input
                     type="text"
                     className="form-control"
@@ -52,32 +60,44 @@ const Pokemons = () => {
                 />
                 <button className={"btn btn-primary"} onClick={() => setSearch(name)}> Buscar</button>
             </div>
-            <br/>
+            <br/>*/}
 
             <div className="card-group ">
-                <div className="card p-3 ">
-                    <img className="card-img-top" src="..." alt="Card image cap"/>
-                    <div className="card-body">
-                        <h5 className="card-title">Card title</h5>
-                        <p className="card-text">This is a wider card with supporting text below as a natural
-                            lead-in to additional content. This content is a little bit longer.</p>
-                        <p className="card-text"><small className="text-muted">Last updated 3 mins ago</small></p>
-                    </div>
-                </div>
+                {team.map((team) => {
+                    return (
+                        url_img = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + team.id + ".png",
+
+                            <div className="card p-3 ">
+                                <img className="card-img-top" src={url_img} alt={team.id}/>
+                                <div className="card-body">
+                                    <h5 className="card-title">{team.name}</h5>
+                                    <form action={""} onSubmit={onSubmit}>
+                                        <button className={"btn btn-lg btn-danger button"}> Eliminar </button>
+                                    </form>
+                                </div>
+                            </div>
+                    )
+                })}
+
             </div>
+
+
             <br/>
             <div className="row">
                 {(() => {
                     if (search !== "") {
                         return (
                             console.log(pokemon, "asd"),
-                                <Pokemon pokemon={pokemon} search={search} name={name}/>
+                                <Pokemon key={pokemon.id} pokemon={pokemon} search={search} name={name}
+                                         setTeam={setTeam}/>
                         )
                     } else {
                         return (
                             console.log(pokemon),
                                 pokemon.map((pokemon) => {
-                                    return <Pokemon key={pokemon.name} pokemon={pokemon} search={search} name={name} />;
+                                    return <Pokemon key={pokemon.id} pokemon={pokemon} search={search} name={name}
+                                                    setTeam={setTeam}
+                                                    team={team}/>
                                 })
                         )
                     }
